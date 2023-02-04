@@ -1,25 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {
+  createBrowserRouter,
+  createRoutesFromElements,
+  RouterProvider,
+  Route,
+  Navigate,
+} from "react-router-dom";
 
-function App() {
+import Navigation from "./components/Nav/Navigation";
+import ProductsPage from "./containers/Products";
+import FavoritesPage from "./containers/Favorites";
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+    <Route path="/" element={<Navigation />}>
+      <Route index element={<Navigate to={"/products"} />} />
+      <Route path="/products" element={<ProductsPage />} />
+      <Route path="/favorites" element={<FavoritesPage />} />
+    </Route>
+  )
+);
+
+const App = (props) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <React.Fragment>
+      <main>
+        <RouterProvider router={router} />
+      </main>
+    </React.Fragment>
   );
-}
+};
 
 export default App;
