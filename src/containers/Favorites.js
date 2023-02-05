@@ -5,11 +5,12 @@ import "./Products.css";
 import { useStore } from "../components/hooks-store/store";
 
 const Favorites = (props) => {
-  const state = useStore()[0].products;
+  const state = useStore(true)[0].products;
   const test = "test";
 
   const dummyd = { test: "asdfasdf", test1: "Asdfas" };
-  console.log(dummyd[test]);
+  const dummy = { ...dummyd };
+  console.log(dummyd[test], dummy);
   const favorites = state.filter((products) => products.isFavorite === true);
   let content = <p className="placeholder">Got no favorites yet!</p>;
 

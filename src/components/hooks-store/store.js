@@ -8,29 +8,47 @@ let actions = {};
 
 // inside of useStore will re-render the value and each components have independent render or functions. and this is where we going to manage all of the outside value
 
-export const useStore = () => {
+export const useStore = (shouldListen = true) => {
   const setState = useState(globalState)[1];
+  console.log(setState);
 
   const dispatch = (actionIdentifier, payload) => {
+    /* With this you can pass a value thru that "actions[actionIdentifier] // this >"(globalState, payload)"" */
+
     const newState = actions[actionIdentifier](globalState, payload);
 
     globalState = { ...globalState, ...newState };
 
+    //Literally just to re-render the component who uses "useStore"
+
     for (const listener of listeners) {
       listener(globalState);
+      console.log(listener);
+      console.log(listeners);
     }
+    console.log(listeners);
   };
 
+  //Literally just to re-render the component who uses "useStore"
+
   useEffect(() => {
-    listeners.push(setState);
+    if (shouldListen) {
+      listeners.push(setState);
+    }
+
+    //A clean up
 
     return () => {
-      listeners = listeners.filter((listeners) => listeners !== setState);
+      if (shouldListen) {
+        listeners = listeners.filter((listeners) => listeners !== setState);
+      }
     };
-  }, [setState]);
+  }, [setState, shouldListen]);
 
   return [globalState, dispatch];
 };
+
+//To initialize store if they have ones
 
 export const initStore = (initialAction, initialState) => {
   if (initialState) {
